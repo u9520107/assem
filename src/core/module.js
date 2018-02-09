@@ -1,4 +1,4 @@
-import Injector from './injector';
+import Injector from '../lib/injector';
 
 class Module {
   constructor(...args) {
