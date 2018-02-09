@@ -13,7 +13,7 @@ class Module {
 
   }
 
-  _reSetSate() {
+  _resetState() {
 
   }
 
