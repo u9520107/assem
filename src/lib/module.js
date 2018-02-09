@@ -1,25 +1,51 @@
+import Injector from './injector';
+
 class Module {
   constructor(...args) {
-    this._initialize();
+    this.__arguments = args;
+  }
+
+  create() {
+    return Injector.bootstrap(this);
+  }
+
+  _setState() {
+
+  }
+
+  _reSetSate() {
+
   }
 
   _initialize() {
 
   }
 
-  async _asyncInitialize() {
+  _moduleWillMount() {
 
   }
 
-  __moduleWillMount() {
+  _moduleDidMount() {
 
   }
 
-  __moduleDidMount() {
+  _moduleWillUnmount() {
 
   }
 
-  __moduleWillUnmount() {
-
+  get state() {
+    return this.__arguments.state;
   }
+
+  get status() {
+    return this.state.status;
+  }
+
+  get dependencyMap() {
+    return [];
+  }
+}
+
+export {
+  Module as default
 }
