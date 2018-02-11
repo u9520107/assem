@@ -1,4 +1,4 @@
-import Module from '../../src/lib/module';
+import Module from '../../src/core/module';
 import module from '../../src/api/module';
 
 class Phone extends Module {
@@ -7,7 +7,7 @@ class Phone extends Module {
 
 @module({
   name: 'Auth',
-  dependencies: ['Storage']
+  dependencies: ['Storage'],
 })
 class Auth extends Module {
 
