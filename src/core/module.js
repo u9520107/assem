@@ -2,19 +2,7 @@ import Injector from '../lib/injector';
 
 class Module {
   constructor(...args) {
-    this.__arguments = args;
-  }
-
-  create() {
-    return Injector.bootstrap(this);
-  }
-
-  _setState() {
-
-  }
-
-  _resetState() {
-
+    this._arguments = args;
   }
 
   _initialize() {
@@ -33,8 +21,23 @@ class Module {
 
   }
 
+  _setState() {
+
+  }
+
+  _resetState() {
+
+  }
+
+  create() {
+    return Injector.bootstrap(this);
+  }
+
   get state() {
-    return this.__arguments.state;
+    if (typeof this._getState !== 'function') {
+      throw new Error('State APIs Setup Error')
+    }
+    return this._getState();
   }
 
   get status() {
