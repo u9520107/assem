@@ -1,5 +1,6 @@
 import Module from '../../src/core/module';
 import module from '../../src/api/module';
+import Storage from '../storage';
 
 class Phone extends Module {
 
@@ -11,37 +12,4 @@ class Phone extends Module {
 })
 class Auth extends Module {
 
-}
-
-@module({
-  name: 'Storage'
-})
-class Storage extends Module {
-  constructor(...args) {
-    super(...args);
-  }
-
-  clear() {
-
-  }
-
-  getItem() {
-
-  }
-
-  key() {
-
-  }
-
-  get length() {
-
-  }
-
-  removeItem() {
-
-  }
-
-  setItem() {
-
-  }
 }
