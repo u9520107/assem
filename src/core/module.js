@@ -1,42 +1,59 @@
 import Injector from '../lib/injector';
 
+const DEFAULT_PROPERTY = {
+  configurable: false,
+  enumerable: false,
+  writable: false,
+};
+
 class Module {
-  constructor(...args) {
-    this._arguments = args;
+  constructor(params = {}, modules = {}) {
+    const { setState, getState } = params;
+    Object.defineProperties(this, {
+      _arguments: {
+        ...DEFAULT_PROPERTY,
+        value: params,
+      },
+      _modules: {
+        ...DEFAULT_PROPERTY,
+        value: modules,
+      }
+    });
+    this._state = {};
+    this._setState = setState || ((state) => {
+      const [key, value] = Object.entries(state);
+      this._state[key] = value;
+    });
+    this._getState = getState || (() => {
+      return this._state;
+    });
+  }
+
+  _moduleWillInitialize() {
+    this._setState({ status: 'pending' });
   }
 
   _initialize() {
-
+    this._setState({ status: 'initializing' });
   }
 
-  _moduleWillMount() {
+  _moduleDidInitialize() {
+    this._setState({ status: 'initialized' });
+  }
 
+  _mount() {
+    this._setState({ status: 'mounting' });
   }
 
   _moduleDidMount() {
-
+    this._setState({ status: 'ready' });
   }
 
-  _moduleWillUnmount() {
-
-  }
-
-  _setState() {
-
-  }
-
-  _resetState() {
-
-  }
-
-  create() {
+  static create() {
     return Injector.bootstrap(this);
   }
 
   get state() {
-    if (typeof this._getState !== 'function') {
-      throw new Error('State APIs Setup Error')
-    }
     return this._getState();
   }
 
@@ -51,4 +68,4 @@ class Module {
 
 export {
   Module as default
-}
+};
