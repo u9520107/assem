@@ -83,12 +83,19 @@ class Module {
     return Injector.bootstrap(this);
   }
 
-  setStore() {
-
+  setStore(store) {
+    this._setStore(store);
+    this._initModule();
   }
 
-  _setStore() {
+  _setStore(store) {
+    this._store = store;
+    // forEach this._store
+  }
 
+  _initModule() {
+    // initialize
+    // forEach subModule _initModule
   }
 
   get store() {
