@@ -28,6 +28,13 @@ class Module {
       return this._state;
     });
   }
+  _mount() {
+    this._setState({ status: 'mounting' });
+  }
+
+  _moduleDidMount() {
+    this._setState({ status: 'mounted' });
+  }
 
   _moduleWillInitialize() {
     this._setState({ status: 'pending' });
@@ -38,14 +45,6 @@ class Module {
   }
 
   _moduleDidInitialize() {
-    this._setState({ status: 'initialized' });
-  }
-
-  _mount() {
-    this._setState({ status: 'mounting' });
-  }
-
-  _moduleDidMount() {
     this._setState({ status: 'ready' });
   }
 
