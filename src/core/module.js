@@ -6,7 +6,7 @@ const DEFAULT_PROPERTY = {
   enumerable: false,
   writable: false,
 };
-
+//subscribe dispatch getState
 class Module {
   constructor(params = {}, modules = {}) {
     const { setState, getState } = params;
@@ -31,34 +31,43 @@ class Module {
   }
 
   _mount() {
-    const status  = actionTypes.mounting;
+    const status = actionTypes.mounting;
     this._setState({ status });
     this.mount();
   }
 
   _moduleDidMount() {
-    const status  = actionTypes.mounted;
+    const status = actionTypes.mounted;
     this._setState({ status });
     this.moduleDidMount();
   }
 
   _moduleWillInitialize() {
-    const status  = actionTypes.pending;
+    const status = actionTypes.pending;
     this._setState({ status });
     this.moduleWillInitialize();
   }
 
   _initialize() {
-    const status  = actionTypes.initializing;
+    const status = actionTypes.initializing;
     this._setState({ status });
     this.initialize();
   }
 
   _moduleDidInitialize() {
-    const status  = actionTypes.initialized;
+    const status = actionTypes.initialized;
     this._setState({ status });
     this.moduleDidInitialize();
   }
+
+  _subscribe(callback) {
+    this.onStateChange();
+    if (typeof callback === 'function') {
+      return callback();
+    }
+  }
+
+  onStateChange() {}
 
   mount() {}
 
@@ -72,6 +81,21 @@ class Module {
 
   static create() {
     return Injector.bootstrap(this);
+  }
+
+  setStore() {
+
+  }
+
+  _setStore() {
+
+  }
+
+  get store() {
+    if (!this._store) {
+      throw new Error('module has not been initialized...');
+    }
+    return this._store;
   }
 
   get state() {
