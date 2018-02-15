@@ -1,3 +1,4 @@
+import actionTypes from './actionTypes';
 import Injector from '../lib/injector';
 
 const DEFAULT_PROPERTY = {
@@ -28,25 +29,41 @@ class Module {
       return this._state;
     });
   }
+
   _mount() {
-    this._setState({ status: 'mounting' });
+    this._setState(actionTypes.mounting);
+    this.mount();
   }
 
   _moduleDidMount() {
-    this._setState({ status: 'mounted' });
+    this._setState(actionTypes.mounted);
+    this.moduleDidMount();
   }
 
   _moduleWillInitialize() {
-    this._setState({ status: 'pending' });
+    this._setState(actionTypes.pending);
+    this.moduleWillInitialize();
   }
 
   _initialize() {
-    this._setState({ status: 'initializing' });
+    this._setState(actionTypes.initializing);
+    this.initialize();
   }
 
   _moduleDidInitialize() {
-    this._setState({ status: 'ready' });
+    this._setState(actionTypes.initialized);
+    this.moduleDidInitialize();
   }
+
+  mount() {}
+
+  moduleDidMount() {}
+
+  moduleWillInitialize() {}
+
+  initialize() {}
+
+  moduleDidInitialize() {}
 
   static create() {
     return Injector.bootstrap(this);
