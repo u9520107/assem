@@ -1,6 +1,7 @@
 const {
   prototype: { hasOwnProperty },
   entries,
+  keys,
   defineProperties,
   defineProperty
 } = Object;
@@ -50,3 +51,23 @@ class Enum {
     delete this[item];
   }
 }
+
+const prefixCache = {};
+
+function prefixEnum({ enumMap, prefix, base = enumMap }) {
+  if (!prefix || prefix === '') return base;
+  if (!prefixCache[prefix]) {
+    prefixCache[prefix] = {};
+  }
+  const cache = prefixCache[prefix];
+  if (!cache[base.prefix]) {
+    cache[base.prefix] = new Enum(keys(enumMap), `${prefix}-${enumMap.prefix}`);
+  }
+  return cache[base.prefix];
+}
+
+export {
+  Enum as default,
+  prefixCache,
+  prefixEnum,
+};
