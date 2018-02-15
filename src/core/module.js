@@ -31,27 +31,32 @@ class Module {
   }
 
   _mount() {
-    this._setState(actionTypes.mounting);
+    const status  = actionTypes.mounting;
+    this._setState({ status });
     this.mount();
   }
 
   _moduleDidMount() {
-    this._setState(actionTypes.mounted);
+    const status  = actionTypes.mounted;
+    this._setState({ status });
     this.moduleDidMount();
   }
 
   _moduleWillInitialize() {
-    this._setState(actionTypes.pending);
+    const status  = actionTypes.pending;
+    this._setState({ status });
     this.moduleWillInitialize();
   }
 
   _initialize() {
-    this._setState(actionTypes.initializing);
+    const status  = actionTypes.initializing;
+    this._setState({ status });
     this.initialize();
   }
 
   _moduleDidInitialize() {
-    this._setState(actionTypes.initialized);
+    const status  = actionTypes.initialized;
+    this._setState({ status });
     this.moduleDidInitialize();
   }
 
