@@ -68,41 +68,59 @@ class Module {
    * @private
    */
   _setStore(store) {
-    this._store = store;
+    Object.defineProperty(this, '_store', {
+      ...DEFAULT_PROPERTY,
+      value: store,
+    });
     let {
       subscribe,
       getState,
       setState,
     } = this._store;
-    this._getState = getState;
-    this._setState = setState;
-    this._subscribe = subscribe;
+
     if (typeof subscribe !== 'function') {
       subscriber.add(this._onStateChange.bind(this));
-      this._subscribe = subscriber.report.bind(subscriber);
+      subscribe = subscriber.report.bind(subscriber);
       if (__DEV__) {
         console.warn(`${this.constructor.name} Module not custom 'subscribe'.`);
       }
     }
 
     if (typeof getState !== 'function') {
-      this._state = {};
-      this._getState = defaultGetState.bind(this);
+      Object.defineProperty(this, '_state', {
+        ...DEFAULT_PROPERTY,
+        value: {},
+      });
+      getState = defaultGetState.bind(this);
       if (__DEV__) {
         console.warn(`${this.constructor.name} Module not custom 'getState'.`);
       }
     }
     if (typeof setState !== 'function') {
-      this._setState = defaultSetState.bind(this);
+      setState = defaultSetState.bind(this);
       if (__DEV__) {
         console.warn(`${this.constructor.name} Module not custom 'setState'.`);
       }
     }
-    this._moduleWillInitialize();
+    Object.defineProperties(this, {
+      _setState: {
+        ...DEFAULT_PROPERTY,
+        value: setState,
+      },
+      _getState: {
+        ...DEFAULT_PROPERTY,
+        value: getState,
+      },
+      _subscribe: {
+        ...DEFAULT_PROPERTY,
+        value: subscribe,
+      },
+    });
     // forEach this._store
   }
 
   _initModule() {
+    this._moduleWillInitialize();
     // this._initialize();
     // initialize
     // forEach subModule _initModule
