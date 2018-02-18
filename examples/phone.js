@@ -16,4 +16,8 @@ class Phone extends Module {
 
 const phone = Phone.create();
 const store = createStore(phone.reducer);
-phone.setStore(store);
+const { subscribe, dispatch, getState } = this._store;
+
+phone.setStore({
+
+});
