@@ -4,4 +4,4 @@ export default new Enum([
   'pending',
   'initializing',
   'ready',
-]);
+], 'module');
