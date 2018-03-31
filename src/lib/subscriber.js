@@ -3,6 +3,7 @@ const __DEV__ = process.env.NODE_ENV === 'development';
 export default class Subscriber {
   constructor() {
     this._queue = [];
+    this.add.report = this.report.bind(this);
   }
 
   report(...args) {

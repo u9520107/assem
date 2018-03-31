@@ -1,6 +1,7 @@
 import actionTypes from './actionTypes';
 import moduleStatuses from './moduleStatuses';
-import Subscriber from '../lib/subscriber';
+import { getModuleStatusReducer } from './reducers';
+// import Subscriber from '../lib/subscriber';
 // import Injector from '../lib/injector';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
@@ -11,41 +12,6 @@ const DEFAULT_PROPERTY = {
   writable: false,
 };
 
-function getModuleStatusReducer(types) {
-  return (state = moduleStatuses.pending, { type }) => {
-    switch (type) {
-      case types.init:
-        return moduleStatuses.initializing;
-
-      case types.initSuccess:
-        return moduleStatuses.ready;
-
-      case types.reset:
-        return moduleStatuses.resetting;
-
-      case types.resetSuccess:
-        return moduleStatuses.pending;
-
-      default:
-        return state;
-    }
-  };
-}
-
-function defaultGetState() {
-  return this._state;
-}
-
-function defaultSetState(reducers, { type }) {
-  Object.entries(reducers).forEach(([key, reducer]) => {
-    this._state[key] = reducer(this._state[key], {type});
-  });
-  this._subscribe(); // TODO pass the changed State.
-}
-
-const subscriber = new Subscriber();
-
-//subscribe dispatch getState
 class Module {
   constructor(params = {}, modules = {}) {
     Object.defineProperties(this, {
@@ -58,15 +24,17 @@ class Module {
         value: modules,
       }
     });
-    this._reducers = {
-      status: getModuleStatusReducer(actionTypes)
-    };
     this.actionTypes = actionTypes;
+    const reducers = {
+      status: getModuleStatusReducer(this.actionTypes)
+    };
+    this._reducers = typeof Module.combineReducers === 'function' ?
+      Module.combineReducers(reducers) :
+      reducers;
   }
 
   _initialize() {
     this.moduleWillInitialize();
-    // this._setState({ status });
     this._dispatch({
       type: this.actionTypes.initSuccess,
     });
@@ -84,7 +52,7 @@ class Module {
     this.onStateChange();
   }
 
-  _setStore(store) {
+  _setStore(store = {}) {
     Object.defineProperty(this, '_store', {
       ...DEFAULT_PROPERTY,
       value: store,
@@ -94,24 +62,13 @@ class Module {
       getState,
       dispatch,
     } = this._store;
-    if (typeof subscribe !== 'function') {
-      subscriber.add(this._onStateChange.bind(this));
-      subscribe = subscriber.report.bind(subscriber);
-      if (__DEV__) {
-        console.warn(`${this.constructor.name} Module not custom 'subscribe'.`);
-      }
-    }
-    if (typeof getState !== 'function') {
-      getState = defaultGetState.bind(this);
-      if (__DEV__) {
-        console.warn(`${this.constructor.name} Module not custom 'getState'.`);
-      }
-    }
-    if (typeof dispatch !== 'function') {
-      dispatch = (action) => defaultSetState.call(this, this._reducers, action);
-      if (__DEV__) {
-        console.warn(`${this.constructor.name} Module not custom 'setState'.`);
-      }
+    if (
+      typeof subscribe !== 'function' ||
+      typeof getState !== 'function' ||
+      typeof dispatch !== 'function' ||
+      __DEV__
+    ) {
+      console.warn(`${this.constructor.name} Module did't correctly set custom 'Store'.`);
     }
     Object.defineProperties(this, {
       _dispatch: {
@@ -125,16 +82,13 @@ class Module {
       _subscribe: {
         ...DEFAULT_PROPERTY,
         value: subscribe,
-      },
-      _state: {
-        ...DEFAULT_PROPERTY,
-        value: {},
       }
     });
     // forEach this._store
   }
 
   _initModule() {
+    this._subscribe(this._onStateChange.bind(this));
     this._initialize();
     // this._initialize();
     // initialize
@@ -153,7 +107,6 @@ class Module {
 
   setStore(store = {}) {
     this._setStore(store);
-    this._dispatch({});
     this._initModule();
   }
 
