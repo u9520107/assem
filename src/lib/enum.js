@@ -1,3 +1,5 @@
+import freeze from '../utils/freeze';
+
 const {
   prototype: { hasOwnProperty },
   entries,
@@ -20,6 +22,11 @@ class Enum {
       properties[item] = Enum.setPrefix(item, prefix);
     });
     defineProperties(this, properties);
+    if (Proxy && Reflect) {
+      freeze(this);
+    } else {
+      Object.freeze(this)
+    }
   }
 
   static setPrefix(item, prefix) {
