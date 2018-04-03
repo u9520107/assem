@@ -31,17 +31,6 @@ class Module {
       reducers;
   }
 
-  _getReducers(actionTypes) {
-    return {
-      ...this.getReducers(actionTypes),
-      status: getModuleStatusReducer(actionTypes),
-    };
-  }
-
-  _getActionTypes() {
-    return getActionTypes(this.getActionTypes(), this.constructor.name);
-  }
-
   async _initialize() {
     await this.moduleWillInitialize();
     this._dispatch({
@@ -101,6 +90,17 @@ class Module {
     this._initialize();
     // initialize
     // forEach subModule _initModule
+  }
+
+  _getReducers(actionTypes) {
+    return {
+      ...this.getReducers(actionTypes),
+      status: getModuleStatusReducer(actionTypes),
+    };
+  }
+
+  _getActionTypes() {
+    return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
 
   onStateChange() {}
