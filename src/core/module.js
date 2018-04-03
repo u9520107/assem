@@ -33,19 +33,19 @@ class Module {
       reducers;
   }
 
-  _initialize() {
-    this.moduleWillInitialize();
+  async _initialize() {
+    await this.moduleWillInitialize();
     this._dispatch({
       type: this.actionTypes.initSuccess,
     });
-    this._moduleDidInitialize();
+    await this._moduleDidInitialize();
   }
 
-  _moduleDidInitialize() {
+  async _moduleDidInitialize() {
     this._dispatch({
       type: this.actionTypes.initSuccess,
     });
-    this.moduleDidInitialize();
+    await this.moduleDidInitialize();
   }
 
   _onStateChange() {

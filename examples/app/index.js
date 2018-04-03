@@ -20,11 +20,12 @@ class Index extends Module {
     console.log('this.state',this.state)
   }
 
-  moduleWillInitialize() {
+  async moduleWillInitialize() {
+    await new Promise((r)=>setTimeout(r,1000));
     console.log('moduleWillInitialize: ready ->', this.ready)
   }
 
-  moduleDidInitialize() {
+  async moduleDidInitialize() {
     console.log('moduleDidInitialize: ready ->', this.ready)
   }
 }
