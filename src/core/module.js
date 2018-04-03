@@ -1,4 +1,4 @@
-import actionTypes from './actionTypes';
+import getActionTypes from './actionTypes';
 import moduleStatuses from './moduleStatuses';
 import { getModuleStatusReducer } from './reducers';
 // import Subscriber from '../lib/subscriber';
@@ -24,13 +24,22 @@ class Module {
         value: modules,
       }
     });
-    this.actionTypes = actionTypes;
-    const reducers = {
-      status: getModuleStatusReducer(this.actionTypes)
-    };
+    this.actionTypes = this._getActionTypes();
+    const reducers = this._getReducers(this.actionTypes);
     this._reducers = typeof Module.combineReducers === 'function' ?
       Module.combineReducers(reducers) :
       reducers;
+  }
+
+  _getReducers(actionTypes) {
+    return {
+      ...this.getReducers(actionTypes),
+      status: getModuleStatusReducer(actionTypes),
+    };
+  }
+
+  _getActionTypes() {
+    return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
 
   async _initialize() {
@@ -90,7 +99,6 @@ class Module {
   _initModule() {
     this._subscribe(this._onStateChange.bind(this));
     this._initialize();
-    // this._initialize();
     // initialize
     // forEach subModule _initModule
   }

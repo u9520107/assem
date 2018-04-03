@@ -1,8 +1,21 @@
 import Module from '../../src/core/module';
-import { createStore, combineReducers } from 'redux';
-// import { createStore, combineReducers } from '../../src/lib/store';
+// import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers } from '../../src/lib/store';
 
 Module.combineReducers = combineReducers;
+
+function getTestFieldReducer(types, initialValue) {
+  return (state = initialValue || 'default', { type }) => {
+    switch (type) {
+      case types.setTest:
+        return 'isSetTest';
+      case types.initSuccess:
+        return 'isSetTestInit';
+      default:
+        return state;
+    }
+  };
+}
 
 class Index extends Module {
   constructor({...args} = {}) {
@@ -16,8 +29,20 @@ class Index extends Module {
     this.test = test;
   }
 
+  getActionTypes() {
+    return [
+      'setTest'
+    ];
+  }
+
+  getReducers(actionTypes) {
+    return {
+      testField: getTestFieldReducer(actionTypes),
+    }
+  }
+
   onStateChange() {
-    console.log('this.state',this.state)
+    console.log('this.state.testField',this.state.testField)
   }
 
   async moduleWillInitialize() {
@@ -26,6 +51,9 @@ class Index extends Module {
   }
 
   async moduleDidInitialize() {
+    this._dispatch({
+      type: this.actionTypes.setTest,
+    });
     console.log('moduleDidInitialize: ready ->', this.ready)
   }
 }
@@ -33,6 +61,6 @@ class Index extends Module {
 const index = new Index();
 const store = createStore(index._reducers);
 store.subscribe(() => {
-  console.log(store.getState.apply(index));
+  // console.log(store.getState.apply(index));
 });
 index.setStore(store);
