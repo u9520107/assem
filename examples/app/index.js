@@ -79,6 +79,7 @@ class Index extends Module {
 }
 
 const index = new Index();
+console.log(new Date().getTime() - index.now, 'test')
 const store = createStore(index._reducers);
 store.subscribe(() => {
   // console.log(store.getState.apply(index));
