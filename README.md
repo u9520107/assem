@@ -1,5 +1,5 @@
 # Assem
-It Just a generalized modular combiner for Universal Javascript, and advocates to develop the complex system for Domain-Driven Design.
+It's just a generalized modular combiner for Universal Javascript, and advocates to develop the complex system for Domain-Driven Design.
 
 # Features
 * Module lifecycle
