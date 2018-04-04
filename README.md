@@ -1,9 +1,10 @@
 # Assem
-Modular combiner
+It Just a generalized modular combiner for Universal Javascript, and advocates to develop the complex system for Domain-Driven Design.
 
 # Features
-* Dependencies configurable
-* Granular for the dependencies of the logic function
-* State container optional
 * Module lifecycle
+* Base event system
+* State container optional
+* Extensible for module
 * Dependency injection
+
