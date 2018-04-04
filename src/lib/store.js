@@ -30,7 +30,7 @@ import Subscriber from './subscriber';
 //   return Store
 // }
 
-
+const initStore = Symbol ? Symbol() : '@@@init@@@';
 const subscriber = new Subscriber();
 const subscribe = subscriber.add.bind(subscriber);
 subscribe.report = subscriber.report.bind(subscriber);
@@ -38,13 +38,22 @@ subscribe.report = subscriber.report.bind(subscriber);
 const store = {
   getState: function () {
     if (typeof this._state === 'undefined') {
-      this._dispatch();
+      this._dispatch({ type: initStore });
     }
     return this._state;
   },
-  dispatch: function(action){
-    if (typeof action === 'undefined') {
-      return this._state = {};
+  dispatch: function (action) {
+    if (
+      typeof action !== 'object' ||
+      (
+        typeof action.type !== 'string' &&
+        action.type !== initStore
+      )
+    ) {
+      throw new Error(`invalid action`);
+    }
+    if (action.type === initStore) {
+      this._state = {};
     }
     Object.entries(this._reducers).forEach(([key, reducer]) => {
       this._state[key] = reducer(this._state[key], action);
