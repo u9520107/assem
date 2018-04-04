@@ -27,6 +27,8 @@ class Index extends Module {
       test,
     });
     this.test = test;
+    this.count = 1;
+    this.now = new Date().getTime();
   }
 
   getActionTypes() {
@@ -42,19 +44,37 @@ class Index extends Module {
   }
 
   onStateChange() {
-    console.log('this.state.testField',this.state.testField)
+    console.log('this.state.status ->',this.state.status)
   }
 
   async moduleWillInitialize() {
-    await new Promise((r)=>setTimeout(r,1000));
+    if(!this.now) {
+      this.now = new Date().getTime();
+    } else {
+      console.log(new Date().getTime() - this.now)
+    }
+    // await new Promise((r)=>setTimeout(r,1000));
     console.log('moduleWillInitialize: ready ->', this.ready)
   }
 
   async moduleDidInitialize() {
-    this._dispatch({
-      type: this.actionTypes.setTest,
-    });
-    console.log('moduleDidInitialize: ready ->', this.ready)
+    // this._dispatch({
+    //   type: this.actionTypes.setTest,
+    // });
+    console.log(new Date().getTime() - this.now)
+    console.log('moduleDidInitialize: ready ->', this.ready);
+    this.count++;
+    if (this.count === 3) return;
+    await this._resetModule();
+  }
+
+  async moduleWillReset() {
+    console.log('moduleWillReset')
+  }
+
+  async moduleDidReset() {
+    console.log(new Date().getTime() - this.now);
+    console.log('moduleDidReset')
   }
 }
 

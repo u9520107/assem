@@ -1,7 +1,6 @@
 import getActionTypes from './actionTypes';
 import moduleStatuses from './moduleStatuses';
 import { getModuleStatusReducer } from './reducers';
-// import Subscriber from '../lib/subscriber';
 // import Injector from '../lib/injector';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
@@ -34,8 +33,9 @@ class Module {
   async _initialize() {
     await this.moduleWillInitialize();
     this._dispatch({
-      type: this.actionTypes.initSuccess,
+      type: this.actionTypes.init,
     });
+    await this._moduleInitializeCheck();
     await this._moduleDidInitialize();
   }
 
@@ -45,6 +45,8 @@ class Module {
     });
     await this.moduleDidInitialize();
   }
+
+  _moduleInitializeCheck() {}
 
   _onStateChange() {
     this.onStateChange();
@@ -88,9 +90,20 @@ class Module {
   _initModule() {
     this._subscribe(this._onStateChange.bind(this));
     this._initialize();
-    // initialize
     // forEach subModule _initModule
   }
+
+  async _resetModule() {
+    this._dispatch({
+      type: this.actionTypes.reset,
+    });
+    await this.moduleWillReset();
+    await this._moduleResetCheck();
+    await this._initialize();
+    await this.moduleDidReset();
+  }
+
+  async _moduleResetCheck() {}
 
   _getReducers(actionTypes) {
     return {
@@ -108,6 +121,10 @@ class Module {
   moduleWillInitialize() {}
 
   moduleDidInitialize() {}
+
+  moduleWillReset(){}
+
+  moduleDidReset(){}
 
   // static create() {
   //   return Injector.bootstrap(this);
