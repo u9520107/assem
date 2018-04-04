@@ -23,14 +23,19 @@ class Module {
         value: modules,
       }
     });
-    this.actionTypes = this._getActionTypes();
+    this._actionTypes = this._getActionTypes();
     const reducers = this._getReducers(this.actionTypes);
     this._reducers = typeof Module.combineReducers === 'function' ?
       Module.combineReducers(reducers) :
       reducers;
   }
 
+  _moduleWillInitialize() {
+    return this._getState();
+  }
+
   async _initialize() {
+    this._moduleWillInitialize();
     await this.moduleWillInitialize();
     this._dispatch({
       type: this.actionTypes.init,
@@ -116,6 +121,14 @@ class Module {
     return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
 
+  getReducers() {
+    return {}
+  }
+
+  getActionTypes() {
+    return [];
+  }
+
   onStateChange() {}
 
   moduleWillInitialize() {}
@@ -126,13 +139,21 @@ class Module {
 
   moduleDidReset(){}
 
-  // static create() {
-  //   return Injector.bootstrap(this);
-  // }
-
   setStore(store = {}) {
     this._setStore(store);
     this._initModule();
+  }
+
+  dispatch(action) {
+    return this._dispatch(action);
+  }
+
+  get actionTypes() {
+    return this._actionTypes;
+  }
+
+  get reducers() {
+    return this._reducers;
   }
 
   get store() {

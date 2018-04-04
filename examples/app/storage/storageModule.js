@@ -1,6 +1,6 @@
 import Module from '../../src/core/module';
 
-export default class StorageModule extends Module {
+export default class Storage extends Module {
   constructor(...args) {
     super(...args);
     this._arguments = args;

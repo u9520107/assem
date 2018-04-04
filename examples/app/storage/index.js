@@ -1,12 +1,13 @@
-import depend from '../../src/lib/depend';
-import StorageModule from './module';
-import dependence from './dependence';
+import assemble from '../../../src/lib/assemble';
+import storageModule from './storageModule';
+import storageAssembly from './storageAssembly';
 
-const getStorage = depend(dependence, StorageModule);
+const getStorage = assemble(storageAssembly, storageModule);
 const Storage = getStorage();
 
 export {
   Storage as default,
-  StorageModule,
   getStorage,
+  storageModule,
+  storageAssembly,
 }

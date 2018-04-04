@@ -1,12 +1,13 @@
-import depend from '../../src/lib/depend';
-import AuthModule from './module';
-import dependence from './dependence';
+import assemble from '../../../src/lib/assemble';
+import AuthModule from './authModule';
+import authAssembly from './authAssembly';
 
-const getAuth = depend(dependence, AuthModule);
+const getAuth = assemble(authAssembly, AuthModule);
 const Auth = getAuth();
 
 export {
   Auth as default,
-  AuthModule,
   getAuth,
+  AuthModule,
+  authAssembly,
 }
