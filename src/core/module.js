@@ -31,6 +31,10 @@ class Module {
     this._actionTypes = this._getActionTypes();
   }
 
+  bootstrap() {
+    this.setStore(Module.createStore(this.reducers))
+  }
+
   get _reducers() {
     const reducers = this._getReducers(this.actionTypes, {});
     return Module.combineReducers(reducers);

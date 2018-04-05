@@ -30,6 +30,7 @@ class Index extends Module {
     this.test = test;
     this.count = 1;
     this.now = new Date().getTime();
+    this.bootstrap();
     // this.setStore(Module.createStore(this.reducers))
   }
 
@@ -73,8 +74,8 @@ class Index extends Module {
   }
 }
 
-// const index = new Index();
-const index = Index.create();
+const index = new Index();
+// const index = Index.create();
 // const store = createStore(index._reducers);
 index.store.subscribe(() => {
   // console.log('[store.subscribe]', index.state.status);

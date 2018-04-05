@@ -60,6 +60,7 @@ class Phone extends Module {
     //     storage: this.storage
     //   }),
     // });
+    this.bootstrap();
   }
 
   get index (){
@@ -96,7 +97,7 @@ const index = new Index({
   // getState: () => phone.state.index,
   indexVersion: '0.0.1'
 });
-const phone = Phone.create({
+const phone = new Phone({
   version: '0.1'
 }, { index });
 phone.store.subscribe(() => {
