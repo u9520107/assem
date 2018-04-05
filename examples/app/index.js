@@ -61,7 +61,7 @@ class Index extends Module {
     });
     console.log(' moduleDidInitialize: this.state.status ->', this.state.status);
     this.count++;
-    if (this.count === 3) return;
+    if (this.count > 2) return;
     await this._resetModule();
   }
 

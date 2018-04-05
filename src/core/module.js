@@ -1,7 +1,8 @@
 import getActionTypes from './actionTypes';
 import moduleStatuses from './moduleStatuses';
 import { getModuleStatusReducer } from './reducers';
-import Base from './base'
+import Base from './base';
+import flatten from '../utils/flatten';
 // import Injector from '../lib/injector';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
@@ -25,19 +26,17 @@ class Module extends Base{
         value: modules,
       }
     });
-    if (Object.keys(this._modules).length === 0) {
-      const key = this.constructor.name.toLowerCase();
-      this.getState = params.getState || (() => (this._store.getState.call(this)[key]));
-    }
+    const key = this.constructor.name.toLowerCase();
+    this.getState = this._arguments.getState || (() => (this._store.getState.call(this)[key]));
   }
 
-  get proto() {
+  get _proto() {
     return this.__proto__.constructor;
   }
 
   get _reducers() {
     const reducers = this._getReducers(this.actionTypes, {});
-    return this.proto.combineReducers(reducers);
+    return this._proto.combineReducers(reducers);
   }
 
   _moduleWillInitialize() {
@@ -60,10 +59,11 @@ class Module extends Base{
         type: this.actionTypes.initSuccess,
       });
       await this.moduleDidInitialize();
-    } else {
-      await new Promise((resolve) => setTimeout(resolve));
-      await this._moduleDidInitialize();
     }
+    // else {
+    //   await new Promise((resolve) => setTimeout(resolve));
+    //   await this._moduleDidInitialize();
+    // }
   }
 
   _moduleInitializeCheck() {
@@ -72,6 +72,10 @@ class Module extends Base{
 
   _onStateChange() {
     this.onStateChange();
+    if (this.pending && !this.__init__ && this._moduleInitializeCheck()) {
+      this.__init__ = true;
+      this._moduleDidInitialize();
+    }
   }
 
   _setStore(store = {}) {
@@ -151,7 +155,8 @@ class Module extends Base{
   }
 
   bootstrap() {
-    this.setStore(this.proto.createStore(this.reducers))
+    this._proto.boot(this._proto, this);
+    // this.setStore(this._proto.createStore(this.reducers))
   }
 
   static create(config, modules) {
@@ -164,6 +169,10 @@ class Module extends Base{
   }
 
   static boot(proto, module) {
+    if (typeof module._modules === 'object') {
+      const flattenModules = flatten(module);
+      Object.assign(module._modules, flattenModules);
+    }
     module.setStore(proto.createStore(module.reducers));
   }
 

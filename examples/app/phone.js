@@ -24,15 +24,19 @@ Module.createStore = createStore;
 //     }
 //   };
 // }
-class Contact extends Module {}
+class Contact extends Module {
+  async moduleWillInitialize() {
+    await new Promise((r)=>setTimeout(r,3000));
+  }
+}
 class Index extends Module {
-  // onStateChange() {
-  //   // console.log(this.state,' index')
-  // }
+  onStateChange() {
+
+  }
   //
-  // async moduleWillInitialize() {
-  //   await new Promise((r)=>setTimeout(r,1000));
-  // }
+  async moduleWillInitialize() {
+    await new Promise((r)=>setTimeout(r,2000));
+  }
 }
 
 // @moduleFactory({
@@ -42,10 +46,10 @@ class Index extends Module {
 //   ]
 // })
 class Phone1 extends Module {
-  // constructor(params, modules) {
-  //   super(params, modules);
-  //   // this.bootstrap();
-  // }
+  constructor(params, modules) {
+    super(params, modules);
+    this.bootstrap();
+  }
   // get index (){
   //   return this._modules.index;
   // }
@@ -93,11 +97,16 @@ class Phone extends Phone1 {}
 // const index = new Index({
 //   indexVersion: '0.0.1'
 // });
-const phone = Phone.create({
-  version: '0.1'
-}, { index: new Index({},{
-    contact: new Contact()
-  }) });
+const contact = new Contact();
+const index = new Index({},{
+  contact,
+});
+const phone = new Phone({}, {
+  index,
+});
+// const phone = Phone.create({
+//   version: '0.1'
+// }, { index });
 phone.store.subscribe(() => {
-  console.log('[store.subscribe]', phone.state.status, phone._modules.index.state.status, phone._modules.contact.state.status, phone.state.kkk.sss);
+  console.log('[store.subscribe]', phone.state.status, phone._modules.index.status, phone._modules.contact.status);
 });
