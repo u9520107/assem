@@ -23,13 +23,13 @@ function getTestFieldReducer(types, initialValue) {
 }
 
 class Index extends Module {
-  onStateChange() {
-    // console.log(this.state,' index')
-  }
-
-  // async moduleWillInitialize() {
-  //   await new Promise((r)=>setTimeout(r,1000));
+  // onStateChange() {
+  //   // console.log(this.state,' index')
   // }
+  //
+  // // async moduleWillInitialize() {
+  // //   await new Promise((r)=>setTimeout(r,1000));
+  // // }
 }
 
 // @moduleFactory({
@@ -39,18 +39,18 @@ class Index extends Module {
 //   ]
 // })
 class Phone extends Module {
-  constructor(params, modules) {
-    super(params, modules);
-    // this.bootstrap();
-  }
+  // constructor(params, modules) {
+  //   super(params, modules);
+  //   // this.bootstrap();
+  // }
 
-  get index (){
-    return this._modules.index;
-  }
+  // get index (){
+  //   return this._modules.index;
+  // }
 
-  onStateChange() {
-    console.log('[store.subscribe] ->', this.state.status, this.index.state.status);
-  }
+  // onStateChange() {
+  //   console.log('[store.subscribe] ->', this.state.status, this.index.state.status);
+  // }
 
   getReducers(actionTypes) {
     return {
@@ -61,21 +61,20 @@ class Phone extends Module {
     }
   }
 
-  getActionTypes() {
-    return [
-      'setTest'
-    ]
-  }
-
-  moduleDidInitialize() {
-    this.dispatch({
-      type: this.actionTypes.setTest,
-    })
-  }
+  // getActionTypes() {
+  //   return [
+  //     'setTest'
+  //   ]
+  // }
+  //
+  // moduleDidInitialize() {
+  //   this.dispatch({
+  //     type: this.actionTypes.setTest,
+  //   })
+  // }
 }
 
 const index = new Index({
-  // getState: () => phone.state.index,
   indexVersion: '0.0.1'
 });
 const phone = Phone.create({
