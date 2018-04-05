@@ -51,6 +51,9 @@ class Module {
         type: this.actionTypes.initSuccess,
       });
       await this.moduleDidInitialize();
+    } else {
+      await new Promise((resolve) => setTimeout(resolve));
+      await this._moduleDidInitialize();
     }
   }
 
@@ -60,9 +63,6 @@ class Module {
 
   _onStateChange() {
     this.onStateChange();
-    if (!this.ready && this.pending) {
-      this._moduleDidInitialize();
-    }
   }
 
   _setStore(store = {}) {

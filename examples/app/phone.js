@@ -31,12 +31,12 @@ class Index extends Module {
   // }
 
   onStateChange() {
-    console.log(this.state,' index')
+    // console.log(this.state,' index')
   }
 
-  // async moduleWillInitialize() {
-  //   await new Promise((r)=>setTimeout(r,1000));
-  // }
+  async moduleWillInitialize() {
+    await new Promise((r)=>setTimeout(r,1000));
+  }
 }
 
 // @moduleFactory({
@@ -67,7 +67,7 @@ class Phone extends Module {
   }
 
   onStateChange() {
-    console.log('[store.subscribe]', this.state.status, this.state.index.status, this.index.state.status);
+    console.log('[store.subscribe] ->', this.state.status, this.state.index.status, this.index.state.status);
   }
 
   getReducers(actionTypes) {
@@ -79,17 +79,28 @@ class Phone extends Module {
     }
   }
 
-}
+  getActionTypes() {
+    return [
+      'setTest'
+    ]
+  }
 
-const config = {
-  version: '0.1'
-};
+  moduleDidInitialize() {
+    this.dispatch({
+      type: this.actionTypes.setTest,
+    })
+  }
+}
 
 const index = new Index({
   getState: () => phone.state.index
 });
-const phone = Phone.create(config, { index });
-console.log(phone.store)
+const phone = Phone.create({
+  version: '0.1'
+}, { index });
+phone.store.subscribe(() => {
+  console.log('[store.subscribe]', phone.state.status, phone.state.index.status, phone.index.state.status);
+});
 // const phone = new Phone(config, { index });
 // const store = createStore(phone.reducers);
 // store.subscribe(() => {

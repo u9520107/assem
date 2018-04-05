@@ -49,33 +49,33 @@ class Index extends Module {
     console.log('       onStateChange: this.state.status ->',this.state.status);
   }
 
-  // async moduleWillInitialize() {
-  //   await new Promise((r)=>setTimeout(r,1000));
-  //   console.log('moduleWillInitialize: this.state.status ->', this.state.status);
-  // }
+  async moduleWillInitialize() {
+    await new Promise((r)=>setTimeout(r,1000));
+    console.log('moduleWillInitialize: this.state.status ->', this.state.status);
+  }
 
-  // async moduleDidInitialize() {
-  //   this._dispatch({
-  //     type: this.actionTypes.setTest,
-  //   });
-  //   console.log(' moduleDidInitialize: this.state.status ->', this.state.status);
-  //   this.count++;
-  //   if (this.count === 3) return;
-  //   await this._resetModule();
-  // }
-  //
-  // async moduleWillReset() {
-  //   console.log('     moduleWillReset: this.state.status ->', this.state.status);
-  // }
-  //
-  // async moduleDidReset() {
-  //   console.log('      moduleDidReset: this.state.status ->', this.state.status);
-  // }
+  async moduleDidInitialize() {
+    this._dispatch({
+      type: this.actionTypes.setTest,
+    });
+    console.log(' moduleDidInitialize: this.state.status ->', this.state.status);
+    this.count++;
+    if (this.count === 3) return;
+    await this._resetModule();
+  }
+
+  async moduleWillReset() {
+    console.log('     moduleWillReset: this.state.status ->', this.state.status);
+  }
+
+  async moduleDidReset() {
+    console.log('      moduleDidReset: this.state.status ->', this.state.status);
+  }
 }
 
 const index = new Index();
 // const store = createStore(index._reducers);
-// store.subscribe(() => {
-//   // console.log('[store.subscribe]', store.getState.apply(index));
-// });
+index.store.subscribe(() => {
+  // console.log('[store.subscribe]', index.state.status);
+});
 // index.setStore(store);
