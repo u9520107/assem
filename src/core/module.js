@@ -25,7 +25,6 @@ class Module {
     });
     this.getState = params.getState;
     this._actionTypes = this._getActionTypes();
-    // this.setStore(Module.createStore(this.reducers));
   }
 
   get _reducers() {
@@ -101,7 +100,9 @@ class Module {
   _initModule() {
     this._subscribe(this._onStateChange.bind(this));
     this._initialize();
-    // forEach subModule _initModule
+    Object.values(this._modules).forEach( module => {
+      module.setStore(this._store);
+    });
   }
 
   async _resetModule() {
@@ -131,8 +132,16 @@ class Module {
     this[name] = module;
   }
 
-  static create(config) {
+  static create(config, modules) {
+    const  RootModule = this;
+    const rootModule = new RootModule(config, modules);
+    Module.boot(rootModule);
+    return rootModule;
     // return Injector.bootstrap(this, config);
+  }
+
+  static boot(module) {
+    module.setStore(Module.createStore(module.reducers));
   }
 
   getReducers() {

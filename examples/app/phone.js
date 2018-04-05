@@ -2,9 +2,9 @@ import Module from '../../src/core/module';
 // import { moduleFactory } from '../../src/api/module';
 // import Storage from './storage';
 // import Auth from './auth';
-// import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers } from 'redux';
 
-import { createStore, combineReducers } from '../../src/lib/store';
+// import { createStore, combineReducers } from '../../src/lib/store';
 
 Module.combineReducers = combineReducers;
 Module.createStore = createStore;
@@ -49,15 +49,9 @@ class Phone extends Module {
   constructor(params, modules) {
     super(params, modules);
     // const reducers = {};
-    const index = new Index({
-      // getState: () => this.state.index
-    });
-    this.addModule({
-      name: 'index',
-      module: index,
-    });
-    this.setStore(createStore(this.reducers));
-    this.index.setStore(this._store);
+
+    // this.setStore(createStore(this.reducers));
+    // this._modules.index.setStore(this._store);
 
     // reducers.index = this.index.reducers;
     // this.addModule({
@@ -68,6 +62,10 @@ class Phone extends Module {
     //     storage: this.storage
     //   }),
     // });
+  }
+
+  get index (){
+    return this._modules.index;
   }
 
   onStateChange() {
@@ -89,8 +87,11 @@ const config = {
   version: '0.1'
 };
 
-// const phone = Phone.create(config);
-new Phone(config);
+const index = new Index({
+  getState: () => phone.state.index
+});
+const phone = Phone.create(config, { index });
+// const phone = new Phone(config, { index });
 // const store = createStore(phone.reducers);
 // store.subscribe(() => {
 //   console.log('[store.subscribe]', phone.state, phone.index.state);
