@@ -23,15 +23,18 @@ class Module {
         value: modules,
       }
     });
+    this.getState = params.getState;
     this._actionTypes = this._getActionTypes();
-    const reducers = this._getReducers(this.actionTypes);
-    this._reducers = typeof Module.combineReducers === 'function' ?
-      Module.combineReducers(reducers) :
-      reducers;
+    // this.setStore(Module.createStore(this.reducers));
+  }
+
+  get _reducers() {
+    const reducers = this._getReducers(this.actionTypes, this._arguments.initialValue);
+    return Module.combineReducers(reducers);
   }
 
   _moduleWillInitialize() {
-    return this._getState();
+    // return this._getState();
   }
 
   async _initialize() {
@@ -51,7 +54,9 @@ class Module {
     await this.moduleDidInitialize();
   }
 
-  _moduleInitializeCheck() {}
+  async _moduleInitializeCheck() {
+    //?
+  }
 
   _onStateChange() {
     this.onStateChange();
@@ -67,6 +72,7 @@ class Module {
       getState,
       dispatch,
     } = this._store;
+    getState = this.getState || getState.bind(this);
     if (
       typeof subscribe !== 'function' ||
       typeof getState !== 'function' ||
@@ -82,7 +88,7 @@ class Module {
       },
       _getState: {
         ...DEFAULT_PROPERTY,
-        value: getState.bind(this),
+        value: getState,
       },
       _subscribe: {
         ...DEFAULT_PROPERTY,
@@ -110,15 +116,23 @@ class Module {
 
   async _moduleResetCheck() {}
 
-  _getReducers(actionTypes) {
+  _getReducers(actionTypes, initialValue = {}) {
     return {
-      ...this.getReducers(actionTypes),
-      status: getModuleStatusReducer(actionTypes),
+      ...this.getReducers(actionTypes, initialValue),
+      status: getModuleStatusReducer(actionTypes, initialValue.status),
     };
   }
 
   _getActionTypes() {
     return getActionTypes(this.getActionTypes(), this.constructor.name);
+  }
+
+  addModule({ name, module}) {
+    this[name] = module;
+  }
+
+  static create(config) {
+    // return Injector.bootstrap(this, config);
   }
 
   getReducers() {

@@ -26,9 +26,7 @@ const store = {
     if (action.type === INIT_STORE) {
       this._state = {};
     }
-    Object.entries(this._reducers).forEach(([key, reducer]) => {
-      this._state[key] = reducer(this._state[key], action);
-    });
+    this._state = this._reducers(this._state, action);
     this._subscribe.report();
   },
   subscribe,
@@ -38,4 +36,11 @@ export function createStore() {
   return store;
 }
 
-export const combineReducers = (reducers) => reducers;
+export const combineReducers = (reducers) => {
+  return (state = {}, action) => {
+    return Object.entries(reducers).reduce((nextState, [key, reducer]) => {
+      nextState[key] = reducer(state[key], action);
+      return nextState;
+    }, state);
+  }
+};
