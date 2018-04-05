@@ -1,6 +1,7 @@
 import getActionTypes from './actionTypes';
 import moduleStatuses from './moduleStatuses';
 import { getModuleStatusReducer } from './reducers';
+import Base from './base'
 // import Injector from '../lib/injector';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
@@ -11,10 +12,7 @@ const DEFAULT_PROPERTY = {
   writable: false,
 };
 
-class Module {
-  constructor(params = {}, modules = {}) {
-    this._instanced(params, modules);
-  }
+class Module extends Base{
 
   _instanced(params, modules) {
     Object.defineProperties(this, {
@@ -33,9 +31,13 @@ class Module {
     }
   }
 
+  get proto() {
+    return this.__proto__.constructor;
+  }
+
   get _reducers() {
     const reducers = this._getReducers(this.actionTypes, {});
-    return Module.combineReducers(reducers);
+    return this.proto.combineReducers(reducers);
   }
 
   _moduleWillInitialize() {
@@ -148,19 +150,20 @@ class Module {
   }
 
   bootstrap() {
-    this.setStore(Module.createStore(this.reducers))
+    this.setStore(this.proto.createStore(this.reducers))
   }
 
   static create(config, modules) {
     const  RootModule = this;
     const rootModule = new RootModule(config, modules);
-    Module.boot(rootModule);
+    const proto = rootModule.__proto__.constructor;
+    proto.boot(proto, rootModule);
     return rootModule;
     // return Injector.bootstrap(this, config);
   }
 
-  static boot(module) {
-    module.setStore(Module.createStore(module.reducers));
+  static boot(proto, module) {
+    module.setStore(proto.createStore(module.reducers));
   }
 
   getReducers() {

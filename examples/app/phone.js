@@ -1,27 +1,30 @@
-import Module from '../../src/core/module';
+import Module1 from '../../src/core/module';
+import Base from '../../src/core/base';
+import { createStore, combineReducers } from 'redux';
+import clone from '../../src/utils/clone';
+// import { createStore, combineReducers } from '../../src/lib/store';
+
 // import { moduleFactory } from '../../src/api/module';
 // import Storage from './storage';
 // import Auth from './auth';
-// import { createStore, combineReducers } from 'redux';
 
-import { createStore, combineReducers } from '../../src/lib/store';
-
+const Module = clone(Base)(Module1)
 Module.combineReducers = combineReducers;
 Module.createStore = createStore;
 
-function getTestFieldReducer(types, initialValue) {
-  return (state = initialValue || 'default', { type }) => {
-    switch (type) {
-      case types.setTest:
-        return 'isSetTest';
-      case types.initSuccess:
-        return 'isSetTestInit';
-      default:
-        return state;
-    }
-  };
-}
-
+// function getTestFieldReducer(types, initialValue) {
+//   return (state = initialValue || 'default', { type }) => {
+//     switch (type) {
+//       case types.setTest:
+//         return 'isSetTest';
+//       case types.initSuccess:
+//         return 'isSetTestInit';
+//       default:
+//         return state;
+//     }
+//   };
+// }
+class Contact extends Module {}
 class Index extends Module {
   // onStateChange() {
   //   // console.log(this.state,' index')
@@ -38,7 +41,7 @@ class Index extends Module {
 //     Storage,
 //   ]
 // })
-class Phone extends Module {
+class Phone1 extends Module {
   // constructor(params, modules) {
   //   super(params, modules);
   //   // this.bootstrap();
@@ -85,12 +88,14 @@ class Phone extends Module {
   }
 }
 
-const index = new Index({
-  indexVersion: '0.0.1'
-});
+class Phone extends Phone1 {}
+
+// const index = new Index({
+//   indexVersion: '0.0.1'
+// });
 const phone = Phone.create({
   version: '0.1'
-}, { index });
+}, { index: new Index(), contact: new Contact() });
 phone.store.subscribe(() => {
-  console.log('[store.subscribe]', phone.state.status, phone._modules.index.state.status, phone.state.kkk.sss);
+  console.log('[store.subscribe]', phone.state.status, phone._modules.index.state.status, phone._modules.contact.state.status, phone.state.kkk.sss);
 });
