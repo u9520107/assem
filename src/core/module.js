@@ -23,7 +23,11 @@ class Module {
         value: modules,
       }
     });
-    this.getState = params.getState;
+    if (Object.keys(this._modules).length === 0) {
+      const key = this.constructor.name.toLowerCase();
+      this.getState = params.getState || (() => this._store.getState()[key]);
+    }
+    // this.getState = params.getState;
     this._actionTypes = this._getActionTypes();
   }
 
@@ -66,6 +70,7 @@ class Module {
   }
 
   _setStore(store = {}) {
+    if (this._store) return;
     Object.defineProperty(this, '_store', {
       ...DEFAULT_PROPERTY,
       value: store,
@@ -75,7 +80,7 @@ class Module {
       getState,
       dispatch,
     } = this._store;
-    getState = this.getState || getState.bind(this);
+    getState = !this.parentModule || !this.getState ? getState.bind(this) : this.getState;
     if (
       typeof subscribe !== 'function' ||
       typeof getState !== 'function' ||
@@ -105,6 +110,7 @@ class Module {
     this._subscribe(this._onStateChange.bind(this));
     this._initialize();
     Object.values(this._modules).forEach( module => {
+      module.parentModule = this;
       module.setStore(this._store);
     });
   }
