@@ -29,7 +29,7 @@ class Module {
   }
 
   get _reducers() {
-    const reducers = this._getReducers(this.actionTypes, this._arguments.initialValue);
+    const reducers = this._getReducers(this.actionTypes, {});
     return Module.combineReducers(reducers);
   }
 

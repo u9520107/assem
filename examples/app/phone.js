@@ -23,12 +23,12 @@ function getTestFieldReducer(types, initialValue) {
 }
 
 class Index extends Module {
-  constructor(...args) {
-    super({
-      initialValue: {}
-    });
-    // this.setStore(createStore(this.reducers));
-  }
+  // constructor(...args) {
+  //   super({
+  //     // initialValue: {}
+  //   });
+  //   // this.setStore(createStore(this.reducers));
+  // }
 
   onStateChange() {
     console.log(this.state,' index')
@@ -50,7 +50,7 @@ class Phone extends Module {
     super(params, modules);
     // const reducers = {};
     const index = new Index({
-      getState: () => this.state.index
+      // getState: () => this.state.index
     });
     this.addModule({
       name: 'index',
@@ -72,7 +72,7 @@ class Phone extends Module {
   }
 
   onStateChange() {
-    console.log('[store.subscribe]', this.state.status, this.index.state.status);
+    console.log('[store.subscribe]', this.state.status, this.state.kkk.sss, this.index.state.status);
   }
 
   getReducers(actionTypes) {
