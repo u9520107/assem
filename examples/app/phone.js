@@ -1,4 +1,4 @@
-import Module1 from '../../src/core/module';
+import CoreModule from '../../src/core/module';
 import Base from '../../src/core/base';
 import { createStore, combineReducers } from 'redux';
 import clone from '../../src/utils/clone';
@@ -8,7 +8,7 @@ import clone from '../../src/utils/clone';
 // import Storage from './storage';
 // import Auth from './auth';
 
-const Module = clone(Base)(Module1)
+const Module = clone(Base)(CoreModule)
 Module.combineReducers = combineReducers;
 Module.createStore = createStore;
 
