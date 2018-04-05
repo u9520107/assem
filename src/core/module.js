@@ -131,8 +131,16 @@ class Module {
   async _moduleResetCheck() {}
 
   _getReducers(actionTypes, initialValue = {}) {
+    const reducers = this.getReducers(actionTypes, initialValue);
+    const subReducers = Object
+      .entries(this._modules)
+      .reduce((reducers, [key, module]) => {
+        reducers[key] = module.reducers;
+        return reducers
+      },{});
     return {
-      ...this.getReducers(actionTypes, initialValue),
+      ...reducers,
+      ...subReducers,
       status: getModuleStatusReducer(actionTypes, initialValue.status),
     };
   }

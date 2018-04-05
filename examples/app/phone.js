@@ -27,9 +27,9 @@ class Index extends Module {
   //   // console.log(this.state,' index')
   // }
   //
-  // // async moduleWillInitialize() {
-  // //   await new Promise((r)=>setTimeout(r,1000));
-  // // }
+  // async moduleWillInitialize() {
+  //   await new Promise((r)=>setTimeout(r,1000));
+  // }
 }
 
 // @moduleFactory({
@@ -43,23 +43,21 @@ class Phone extends Module {
   //   super(params, modules);
   //   // this.bootstrap();
   // }
-
   // get index (){
   //   return this._modules.index;
   // }
-
   // onStateChange() {
   //   console.log('[store.subscribe] ->', this.state.status, this.index.state.status);
   // }
 
-  getReducers(actionTypes) {
-    return {
-      kkk: Module.combineReducers({
-        sss: getTestFieldReducer(actionTypes)
-      }),
-      index: this.index.reducers,
-    }
-  }
+  // getReducers(actionTypes) {
+  //   return {
+  //     kkk: Module.combineReducers({
+  //       sss: getTestFieldReducer(actionTypes)
+  //     }),
+  //     // index: this._modules.index.reducers,
+  //   }
+  // }
 
   // getActionTypes() {
   //   return [
@@ -81,5 +79,5 @@ const phone = Phone.create({
   version: '0.1'
 }, { index });
 phone.store.subscribe(() => {
-  console.log('[store.subscribe]', phone.state.status, phone.index.state.status);
+  console.log('[store.subscribe]', phone.state.status, phone._modules.index.state.status);
 });
