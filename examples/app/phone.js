@@ -50,15 +50,14 @@ class Phone extends Module {
     super(params, modules);
     // const reducers = {};
     const index = new Index({
-      // getState: () => this.state.index
+      // getState: () => (console.log(this.state.index.status),this.state.index)
     });
     this.addModule({
       name: 'index',
       module: index,
     });
-    const store = createStore(this.reducers);
-    this.setStore(store);
-    this.index.setStore(store);
+    this.setStore(createStore(this.reducers));
+    this.index.setStore(this._store);
 
     // reducers.index = this.index.reducers;
     // this.addModule({
