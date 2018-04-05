@@ -95,7 +95,9 @@ class Phone extends Phone1 {}
 // });
 const phone = Phone.create({
   version: '0.1'
-}, { index: new Index(), contact: new Contact() });
+}, { index: new Index({},{
+    contact: new Contact()
+  }) });
 phone.store.subscribe(() => {
   console.log('[store.subscribe]', phone.state.status, phone._modules.index.state.status, phone._modules.contact.state.status, phone.state.kkk.sss);
 });
