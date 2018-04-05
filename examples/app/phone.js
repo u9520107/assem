@@ -53,10 +53,23 @@ class Phone extends Module {
   getReducers(actionTypes) {
     return {
       kkk: Module.combineReducers({
-        sss: getTestFieldReducer(actionTypes)
+        sss: this.getTestFieldReducer(actionTypes)
       }),
       // index: this._modules.index.reducers,
     }
+  }
+
+  getTestFieldReducer(types, initialValue) {
+    return (state = initialValue || 'default', { type }) => {
+      switch (type) {
+        case types.setTest:
+          return 'isSetTest';
+        case types.initSuccess:
+          return 'isSetTestInit';
+        default:
+          return state;
+      }
+    };
   }
 
   getActionTypes() {
