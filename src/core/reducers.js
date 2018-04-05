@@ -1,7 +1,7 @@
 import moduleStatuses from './moduleStatuses';
 
 export function getModuleStatusReducer(types, initialValue) {
-  return (state = initialValue || moduleStatuses.pending, { type }) => {
+  return (state = initialValue || moduleStatuses.initial, { type }) => {
     switch (type) {
       case types.init:
         return moduleStatuses.pending;

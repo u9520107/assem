@@ -42,23 +42,27 @@ class Module {
     this._dispatch({
       type: this.actionTypes.init,
     });
-    await this._moduleInitializeCheck();
     await this._moduleDidInitialize();
   }
 
   async _moduleDidInitialize() {
-    this._dispatch({
-      type: this.actionTypes.initSuccess,
-    });
-    await this.moduleDidInitialize();
+    if (this._moduleInitializeCheck()) {
+      this._dispatch({
+        type: this.actionTypes.initSuccess,
+      });
+      await this.moduleDidInitialize();
+    }
   }
 
-  async _moduleInitializeCheck() {
-    //?
+  _moduleInitializeCheck() {
+    return Object.values(this._modules).every( module => module.ready);
   }
 
   _onStateChange() {
     this.onStateChange();
+    if (!this.ready && this.pending) {
+      this._moduleDidInitialize();
+    }
   }
 
   _setStore(store = {}) {
