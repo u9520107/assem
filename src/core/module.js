@@ -55,6 +55,7 @@ class Module extends Base{
 
   async _moduleDidInitialize() {
     if (this._moduleInitializeCheck()) {
+      await this.moduleWillInitializeSuccess();
       this._dispatch({
         type: this.actionTypes.initSuccess,
       });
@@ -177,6 +178,8 @@ class Module extends Base{
   onStateChange() {}
 
   moduleWillInitialize() {}
+
+  moduleWillInitializeSuccess() {}
 
   moduleDidInitialize() {}
 

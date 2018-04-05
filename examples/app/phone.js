@@ -1,8 +1,8 @@
 import CoreModule from '../../src/core/module';
 import Base from '../../src/core/base';
 import { createStore, combineReducers } from 'redux';
-import clone from '../../src/utils/clone';
 // import { createStore, combineReducers } from '../../src/lib/store';
+import clone from '../../src/utils/clone';
 
 // import { moduleFactory } from '../../src/api/module';
 // import Storage from './storage';
@@ -81,7 +81,7 @@ class Phone1 extends Module {
     ]
   }
 
-  moduleDidInitialize() {
+  async moduleWillInitializeSuccess() {
     this.dispatch({
       type: this.actionTypes.setTest,
     })
