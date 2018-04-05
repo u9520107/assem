@@ -2,9 +2,9 @@ import Module from '../../src/core/module';
 // import { moduleFactory } from '../../src/api/module';
 // import Storage from './storage';
 // import Auth from './auth';
-// import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers } from 'redux';
 
-import { createStore, combineReducers } from '../../src/lib/store';
+// import { createStore, combineReducers } from '../../src/lib/store';
 
 Module.combineReducers = combineReducers;
 Module.createStore = createStore;
@@ -69,7 +69,7 @@ class Phone extends Module {
   }
 
   onStateChange() {
-    console.log('[store.subscribe]', this.state.status, this.state.kkk.sss, this.index.state.status);
+    console.log('[store.subscribe]', this.state.status, this.state.index.status, this.index.state.status);
   }
 
   getReducers(actionTypes) {
@@ -88,7 +88,7 @@ const config = {
 };
 
 const index = new Index({
-  // getState: () => phone.state.index
+  getState: () => phone.state.index
 });
 const phone = Phone.create(config, { index });
 // const phone = new Phone(config, { index });
