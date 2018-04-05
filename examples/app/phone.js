@@ -49,10 +49,8 @@ class Phone extends Module {
   constructor(params, modules) {
     super(params, modules);
     // const reducers = {};
-
     // this.setStore(createStore(this.reducers));
     // this._modules.index.setStore(this._store);
-
     // reducers.index = this.index.reducers;
     // this.addModule({
     //   name: 'auth',
@@ -91,6 +89,7 @@ const index = new Index({
   getState: () => phone.state.index
 });
 const phone = Phone.create(config, { index });
+console.log(phone.store)
 // const phone = new Phone(config, { index });
 // const store = createStore(phone.reducers);
 // store.subscribe(() => {
