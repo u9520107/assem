@@ -25,9 +25,8 @@ class Module {
     });
     if (Object.keys(this._modules).length === 0) {
       const key = this.constructor.name.toLowerCase();
-      this.getState = params.getState || (() => this._store.getState()[key]);
+      this.getState = params.getState || (() => (this._store.getState.call(this)[key]));
     }
-    // this.getState = params.getState;
     this._actionTypes = this._getActionTypes();
   }
 
