@@ -13,6 +13,10 @@ const DEFAULT_PROPERTY = {
 
 class Module {
   constructor(params = {}, modules = {}) {
+    this._instanced(params, modules);
+  }
+
+  _instanced(params, modules) {
     Object.defineProperties(this, {
       _arguments: {
         ...DEFAULT_PROPERTY,
@@ -27,11 +31,6 @@ class Module {
       const key = this.constructor.name.toLowerCase();
       this.getState = params.getState || (() => (this._store.getState.call(this)[key]));
     }
-    this._actionTypes = this._getActionTypes();
-  }
-
-  bootstrap() {
-    this.setStore(Module.createStore(this.reducers))
   }
 
   get _reducers() {
@@ -106,7 +105,6 @@ class Module {
         value: subscribe,
       }
     });
-    // forEach this._store
   }
 
   _initModule() {
@@ -149,8 +147,8 @@ class Module {
     return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
 
-  addModule({ name, module}) {
-    this[name] = module;
+  bootstrap() {
+    this.setStore(Module.createStore(this.reducers))
   }
 
   static create(config, modules) {
@@ -193,7 +191,7 @@ class Module {
   }
 
   get actionTypes() {
-    return this._actionTypes;
+    return this._getActionTypes();
   }
 
   get reducers() {

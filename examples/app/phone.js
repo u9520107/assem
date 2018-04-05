@@ -2,9 +2,9 @@ import Module from '../../src/core/module';
 // import { moduleFactory } from '../../src/api/module';
 // import Storage from './storage';
 // import Auth from './auth';
-import { createStore, combineReducers } from 'redux';
+// import { createStore, combineReducers } from 'redux';
 
-// import { createStore, combineReducers } from '../../src/lib/store';
+import { createStore, combineReducers } from '../../src/lib/store';
 
 Module.combineReducers = combineReducers;
 Module.createStore = createStore;
@@ -50,26 +50,26 @@ class Phone extends Module {
   //   console.log('[store.subscribe] ->', this.state.status, this.index.state.status);
   // }
 
-  // getReducers(actionTypes) {
-  //   return {
-  //     kkk: Module.combineReducers({
-  //       sss: getTestFieldReducer(actionTypes)
-  //     }),
-  //     // index: this._modules.index.reducers,
-  //   }
-  // }
+  getReducers(actionTypes) {
+    return {
+      kkk: Module.combineReducers({
+        sss: getTestFieldReducer(actionTypes)
+      }),
+      // index: this._modules.index.reducers,
+    }
+  }
 
-  // getActionTypes() {
-  //   return [
-  //     'setTest'
-  //   ]
-  // }
-  //
-  // moduleDidInitialize() {
-  //   this.dispatch({
-  //     type: this.actionTypes.setTest,
-  //   })
-  // }
+  getActionTypes() {
+    return [
+      'setTest'
+    ]
+  }
+
+  moduleDidInitialize() {
+    this.dispatch({
+      type: this.actionTypes.setTest,
+    })
+  }
 }
 
 const index = new Index({
@@ -79,5 +79,5 @@ const phone = Phone.create({
   version: '0.1'
 }, { index });
 phone.store.subscribe(() => {
-  console.log('[store.subscribe]', phone.state.status, phone._modules.index.state.status);
+  console.log('[store.subscribe]', phone.state.status, phone._modules.index.state.status, phone.state.kkk.sss);
 });
