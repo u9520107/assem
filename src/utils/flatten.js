@@ -7,7 +7,7 @@ export default function flatten(modulesTree, flattenModules = {}) {
     ) {
       flatten(module, flattenModules);
     }
-  })
+  });
   return {
     ...flattenModules,
   }
