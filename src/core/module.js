@@ -122,8 +122,9 @@ class Module extends Base{
   _moduleWillReset() {
     Object.keys(this._modules)
       .forEach(async (key) => {
-        const dependentModule = this.parentModule._modules[key];
-        await dependentModule._resetModule();
+        const parentModule = this.parentModule || this;
+        const dependentModules = parentModule._modules[key];
+        await dependentModules.resetModule();
       });
   }
 

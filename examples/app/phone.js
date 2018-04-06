@@ -1,7 +1,7 @@
+import { createStore, combineReducers } from 'redux';
+// import { createStore, combineReducers } from '../../src/lib/store';
 import CoreModule from '../../src/core/module';
 import Base from '../../src/core/base';
-// import { createStore, combineReducers } from 'redux';
-import { createStore, combineReducers } from '../../src/lib/store';
 import clone from '../../src/utils/clone';
 
 // import { moduleFactory } from '../../src/api/module';
@@ -119,5 +119,5 @@ phone.store.subscribe(() => {
 });
 
 setTimeout(()=> {
-  phone._modules.index.resetModule();
+  phone.resetModule();
 }, 5000);
