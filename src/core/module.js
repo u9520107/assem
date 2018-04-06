@@ -126,7 +126,7 @@ class Module extends Base{
       .forEach(async (key) => {
         const parentModule = this.parentModule || this;
         const dependentModules = parentModule._modules[key];
-        await dependentModules.resetModule();
+        await dependentModules._resetModule();
       });
     await this.moduleWillReset();
   }
@@ -194,8 +194,8 @@ class Module extends Base{
     this._proto.boot(this._proto, this);
   }
 
-  async resetModule() {
-    await this._resetModule();
+  resetModule() {
+    this._resetModule();
   }
 
   setStore(store = {}) {

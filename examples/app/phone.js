@@ -127,5 +127,5 @@ setTimeout(()=> {
 }, 5000);
 
 setTimeout(()=> {
-  phone._modules.contact.resetModule();
+  phone.resetModule();
 }, 15000);
