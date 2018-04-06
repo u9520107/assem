@@ -1,8 +1,9 @@
-import { createStore, combineReducers } from 'redux';
-// import { createStore, combineReducers } from '../../src/lib/store';
+// import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers } from '../../src/lib/store';
 import CoreModule from '../../src/core/module';
 import Base from '../../src/core/base';
 import clone from '../../src/utils/clone';
+// import Auth from './auth/authModule'
 
 // import { moduleFactory } from '../../src/api/module';
 // import Storage from './storage';
@@ -105,7 +106,11 @@ class Phone extends BasePhone {
 //   indexVersion: '0.0.1'
 // });
 class Account extends Module{}
+class Auth extends Module{}
 const account = new Account();
+const auth = new Auth({}, {
+  account,
+});
 const contact = new Contact({}, {
   account
 });
@@ -114,18 +119,19 @@ const index = new Index({},{
 });
 const phone = new Phone({}, {
   index,
+  auth
 });
 // const phone = Phone.create({
 //   version: '0.1'
 // }, { index });
 phone.store.subscribe(() => {
-  console.log('[store.subscribe]', phone.state.status, phone._modules.index.status, phone._modules.contact.status, phone._modules.account.status);
+  console.log('[store.subscribe]', phone._modules.auth.status, phone._modules.contact.status, phone._modules.account.status);
 });
 
-setTimeout(()=> {
-  phone.resetModule();
-}, 5000);
-
-setTimeout(()=> {
-  phone.resetModule();
-}, 15000);
+// setTimeout(()=> {
+//   phone.resetModule();
+// }, 5000);
+//
+// setTimeout(()=> {
+//   phone.resetModule();
+// }, 15000);
