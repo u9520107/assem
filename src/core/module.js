@@ -71,6 +71,8 @@ class Module extends Base{
     this.onStateChange();
     if (this.pending && this._moduleInitializeCheck()) {
       this._moduleDidInitialize();
+    } else if (this.ready && this._moduleResetCheck()) {
+      this._moduleDidReset();
     }
   }
 
@@ -119,29 +121,38 @@ class Module extends Base{
     });
   }
 
-  _moduleWillReset() {
+  async _moduleWillReset() {
     Object.keys(this._modules)
       .forEach(async (key) => {
         const parentModule = this.parentModule || this;
         const dependentModules = parentModule._modules[key];
         await dependentModules.resetModule();
       });
+    await this.moduleWillReset();
   }
 
   async _resetModule() {
-    this._moduleWillReset();
-    await this.moduleWillReset();
+    await this._moduleWillReset();
     this._dispatch({
       type: this.actionTypes.reset,
     });
-    await this._moduleResetCheck();
     await this._initialize();
     this.__init__ = false;
+    this.__reset__ = true;
     await this._moduleDidInitialize();
-    await this.moduleDidReset();
+    await this._moduleDidReset();
   }
 
-  async _moduleResetCheck() {}
+  _moduleResetCheck() {
+    return this.__reset__ && Object.values(this._modules).every( module => module.ready);
+  }
+
+  async _moduleDidReset() {
+    if (this._moduleResetCheck()) {
+      this.__reset__ = false;
+      await this.moduleDidReset();
+    }
+  }
 
   _getReducers(actionTypes, initialValue = {}) {
     const reducers = this.getReducers(actionTypes, initialValue);
@@ -162,10 +173,6 @@ class Module extends Base{
     return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
 
-  bootstrap() {
-    this._proto.boot(this._proto, this);
-  }
-
   static create(config, modules) {
     const  RootModule = this;
     const rootModule = new RootModule(config, modules);
@@ -183,29 +190,13 @@ class Module extends Base{
     module.setStore(proto.createStore(module.reducers));
   }
 
+  bootstrap() {
+    this._proto.boot(this._proto, this);
+  }
+
   async resetModule() {
     await this._resetModule();
   }
-
-  getReducers() {
-    return {}
-  }
-
-  getActionTypes() {
-    return [];
-  }
-
-  onStateChange() {}
-
-  moduleWillInitialize() {}
-
-  moduleWillInitializeSuccess() {}
-
-  moduleDidInitialize() {}
-
-  moduleWillReset(){}
-
-  moduleDidReset(){}
 
   setStore(store = {}) {
     this._setStore(store);
@@ -239,13 +230,33 @@ class Module extends Base{
     return this.state.status;
   }
 
+  get pending() {
+    return this.status === moduleStatuses.pending;
+  }
+
   get ready() {
     return this.status === moduleStatuses.ready;
   }
 
-  get pending() {
-    return this.status === moduleStatuses.pending;
+  get resetting() {
+    return this.status === moduleStatuses.resetting;
   }
+
+  getReducers() { return {} }
+
+  getActionTypes() { return [] }
+
+  onStateChange() {}
+
+  moduleWillInitialize() {}
+
+  moduleWillInitializeSuccess() {}
+
+  moduleDidInitialize() {}
+
+  moduleWillReset(){}
+
+  moduleDidReset(){}
 }
 
 export {

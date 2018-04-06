@@ -97,7 +97,7 @@ class BasePhone extends Module {
 
 class Phone extends BasePhone {
   async moduleDidReset() {
-    console.log('xxxxxx')
+    console.log('xxxxxx', this._modules.contact.status)
   }
 }
 
@@ -125,3 +125,7 @@ phone.store.subscribe(() => {
 setTimeout(()=> {
   phone.resetModule();
 }, 5000);
+
+setTimeout(()=> {
+  phone._modules.contact.resetModule();
+}, 15000);
