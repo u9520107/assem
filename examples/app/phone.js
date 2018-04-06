@@ -48,7 +48,7 @@ class Index extends Module {
 //     Storage,
 //   ]
 // })
-class Phone1 extends Module {
+class BasePhone extends Module {
   constructor(params, modules) {
     super(params, modules);
     this.bootstrap();
@@ -95,7 +95,11 @@ class Phone1 extends Module {
   }
 }
 
-class Phone extends Phone1 {}
+class Phone extends BasePhone {
+  async moduleDidReset() {
+    console.log('xxxxxx')
+  }
+}
 
 // const index = new Index({
 //   indexVersion: '0.0.1'
