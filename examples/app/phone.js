@@ -37,6 +37,9 @@ class Index extends Module {
   async moduleWillInitialize() {
     await new Promise((r)=>setTimeout(r,2000));
   }
+  async moduleDidInitialize() {
+    await new Promise(r=>setTimeout(r, 1000));
+  }
 }
 
 // @moduleFactory({
@@ -97,7 +100,11 @@ class Phone extends Phone1 {}
 // const index = new Index({
 //   indexVersion: '0.0.1'
 // });
-const contact = new Contact();
+class Account extends Module{}
+const account = new Account();
+const contact = new Contact({}, {
+  account
+});
 const index = new Index({},{
   contact,
 });
@@ -108,5 +115,9 @@ const phone = new Phone({}, {
 //   version: '0.1'
 // }, { index });
 phone.store.subscribe(() => {
-  console.log('[store.subscribe]', phone.state.status, phone._modules.index.status, phone._modules.contact.status);
+  console.log('[store.subscribe]', phone.state.status, phone._modules.index.status, phone._modules.contact.status, phone._modules.account.status);
 });
+
+setTimeout(()=> {
+  phone._modules.index.resetModule();
+}, 5000);

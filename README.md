@@ -1,7 +1,7 @@
 # Assem
 It's just a generalized modular combiner for Universal Javascript, and advocates to develop the complex system for Domain-Driven Design.
 
-# Features
+### Features
 * Module lifecycle
 * Flatten modules mapping
 * Base event system

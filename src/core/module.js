@@ -119,7 +119,16 @@ class Module extends Base{
     });
   }
 
+  _moduleWillReset() {
+    Object.keys(this._modules)
+      .forEach(async (key) => {
+        const dependentModule = this.parentModule._modules[key];
+        await dependentModule._resetModule();
+      });
+  }
+
   async _resetModule() {
+    this._moduleWillReset();
     await this.moduleWillReset();
     this._dispatch({
       type: this.actionTypes.reset,
@@ -171,6 +180,10 @@ class Module extends Base{
       Object.assign(module._modules, flattenModules);
     }
     module.setStore(proto.createStore(module.reducers));
+  }
+
+  async resetModule() {
+    await this._resetModule();
   }
 
   getReducers() {

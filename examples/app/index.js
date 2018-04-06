@@ -60,9 +60,6 @@ class Index extends Module {
       type: this.actionTypes.setTest,
     });
     console.log(' moduleDidInitialize: this.state.status ->', this.state.status);
-    this.count++;
-    if (this.count > 2) return;
-    await this._resetModule();
   }
 
   async moduleWillReset() {
@@ -80,4 +77,8 @@ const index = new Index();
 index.store.subscribe(() => {
   // console.log('[store.subscribe]', index.state.status);
 });
+
+setTimeout(()=> {
+  index.resetModule();
+}, 2000)
 
