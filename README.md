@@ -4,7 +4,10 @@ It's just a generalized modular combiner for Universal Javascript, and advocates
 ### TODO
  -[x] Module lifecycle
  -[x] Flatten modules mapping
- -[x]  Base event system
+ -[x] Base event system
  -[x] State container optional
  -[x] Extensible for module
  -[ ] Dependency injection
+ 
+### Issue
+* `moduleDidReset` multi-tier
