@@ -80,4 +80,4 @@ const index = new Index();
 index.store.subscribe(() => {
   // console.log('[store.subscribe]', index.state.status);
 });
-// index.setStore(store);
+

@@ -54,26 +54,22 @@ class Module extends Base{
 
   async _moduleDidInitialize() {
     if (this._moduleInitializeCheck()) {
+      this.__init__ = true;
       await this.moduleWillInitializeSuccess();
       this._dispatch({
         type: this.actionTypes.initSuccess,
       });
       await this.moduleDidInitialize();
     }
-    // else {
-    //   await new Promise((resolve) => setTimeout(resolve));
-    //   await this._moduleDidInitialize();
-    // }
   }
 
   _moduleInitializeCheck() {
-    return Object.values(this._modules).every( module => module.ready);
+    return !this.__init__ && Object.values(this._modules).every( module => module.ready);
   }
 
   _onStateChange() {
     this.onStateChange();
-    if (this.pending && !this.__init__ && this._moduleInitializeCheck()) {
-      this.__init__ = true;
+    if (this.pending && this._moduleInitializeCheck()) {
       this._moduleDidInitialize();
     }
   }
@@ -124,12 +120,14 @@ class Module extends Base{
   }
 
   async _resetModule() {
+    await this.moduleWillReset();
     this._dispatch({
       type: this.actionTypes.reset,
     });
-    await this.moduleWillReset();
     await this._moduleResetCheck();
     await this._initialize();
+    this.__init__ = false;
+    await this._moduleDidInitialize();
     await this.moduleDidReset();
   }
 
@@ -156,7 +154,6 @@ class Module extends Base{
 
   bootstrap() {
     this._proto.boot(this._proto, this);
-    // this.setStore(this._proto.createStore(this.reducers))
   }
 
   static create(config, modules) {
