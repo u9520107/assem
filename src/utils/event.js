@@ -54,10 +54,11 @@ class Event {
   emit(eventType, ...args) {
     const listeners = this._events[eventType];
     if (
-      !Array.isArray(listeners) ||
-      listeners.length === 0
+      !Array.isArray(listeners)
     ) {
-      throw new Error(`Event type ${eventType} should be registered listener before emit it.`);
+      throw new Error(`Event type ${eventType} should be registered before emit it.`);
+    } else if (listeners.length === 0) {
+      throw new Error(`Event type ${eventType} has not any listener.`);
     }
     listeners.forEach(({ callback, once }, index) => {
       callback.apply(this, args);
