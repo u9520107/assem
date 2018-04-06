@@ -27,19 +27,28 @@ class Box extends Component {
   }
 }
 
-const app = UI.create({
+class AppView extends Module {
+  get component() {
+    return this._modules.ui.component;
+  }
+  render() {
+    return React.createElement(this.component, {app});
+  }
+}
+
+const ui = new UI({
   component: Box
 }, {
   index: new IndexModule()
 });
 
-const View = app.component;
+const app = AppView.create({}, { ui });
 
 class App extends Component {
   render() {
     return (
       <Provider store={app.store} >
-        <View app={app}/>
+        {app.render()}
       </Provider>
     )
   }
