@@ -122,7 +122,7 @@ const assemblingCount =  new AssemblingCount({
 const assemblingTodo =  new AssemblingTodo({
   component: TodoUI
 }, {
-  count: new Todo()
+  todo: new Todo()
 });
 
 
