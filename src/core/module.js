@@ -26,6 +26,7 @@ class Module extends Base{
         value: modules,
       }
     });
+    // TODO constructor.name diff?
     const key = this.constructor.name.toLowerCase();
     this.getState = this._arguments.getState || (() => (this._store.getState.call(this)[key]));
   }
