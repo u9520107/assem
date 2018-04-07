@@ -4,6 +4,7 @@ import { Provider, connect } from 'react-redux';
 
 import Example from './example';
 import Count from './count';
+import Todo from './todo';
 import Module from './module';
 
 class AssemblingExample extends Module {
@@ -56,6 +57,36 @@ class CountUI extends Component {
   }
 }
 
+class AssemblingTodo extends Module {
+  state(_, { app }) {
+    return {
+      todo: app._modules.todo.state.todo
+    }
+  }
+  action(_, { app }) {
+    return {
+      add: (...args) => app._modules.todo.add(...args)
+    }
+  }
+  get component() {
+    return connect(this.state, this.action)(this._arguments.component)
+  }
+}
+
+class TodoUI extends Component {
+  render() {
+    return (
+      <div>
+        <input ref={(ref)=>this.input=ref}/>
+        <button onClick={()=>{this.props.add(this.input.value);this.input.value=''}}>Add</button>
+        <ul>
+          {this.props.todo.map((item,key)=>(<li key={key}>{item}</li>))}
+        </ul>
+      </div>
+    )
+  }
+}
+
 class AppView extends Module {
   constructor(params, modules) {
     super(params, modules);
@@ -88,7 +119,14 @@ const assemblingCount =  new AssemblingCount({
   count: new Count()
 });
 
-const app = AppView.create({}, { assemblingExample, assemblingCount });
+const assemblingTodo =  new AssemblingTodo({
+  component: TodoUI
+}, {
+  count: new Todo()
+});
+
+
+const app = AppView.create({}, { assemblingExample, assemblingCount, assemblingTodo });
 
 class App extends Component {
   render() {
