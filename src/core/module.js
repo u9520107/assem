@@ -13,11 +13,9 @@ const DEFAULT_PROPERTY = {
   writable: false,
 };
 
-class Module extends Base{
+class Module extends Base {
 
-  _makeInstance(
-    params = {}
-  ) {
+  _makeInstance(params = {}) {
     params.modules = params.modules || [];
     const modulesMapping = params.modules
       .reduce((mapping, module) => {
@@ -74,7 +72,7 @@ class Module extends Base{
   }
 
   _moduleInitializeCheck() {
-    return !this.__init__ && Object.values(this._modules).every( module => module.ready);
+    return !this.__init__ && Object.values(this._modules).every(module => module.ready);
   }
 
   _onStateChange() {
@@ -124,7 +122,7 @@ class Module extends Base{
   _initModule() {
     this._subscribe(this._onStateChange.bind(this));
     this._initialize();
-    Object.values(this._modules).forEach( module => {
+    Object.values(this._modules).forEach(module => {
       module.parentModule = this;
       module.setStore(this._store);
     });
@@ -153,7 +151,7 @@ class Module extends Base{
   }
 
   _moduleResetCheck() {
-    return this.__reset__ && Object.values(this._modules).every( module => module.ready);
+    return this.__reset__ && Object.values(this._modules).every(module => module.ready);
   }
 
   async _moduleDidReset() {
@@ -169,8 +167,8 @@ class Module extends Base{
       .entries(this._modules)
       .reduce((reducers, [key, module]) => {
         reducers[key] = module.reducers;
-        return reducers
-      },{});
+        return reducers;
+      }, {});
     return {
       ...reducers,
       ...subReducers,
@@ -187,7 +185,7 @@ class Module extends Base{
   }
 
   static create(config, modules) {
-    const  RootModule = this;
+    const RootModule = this;
     const rootModule = new RootModule(config, modules);
     const proto = rootModule.__proto__.constructor;
     proto.boot(proto, rootModule);
@@ -255,9 +253,9 @@ class Module extends Base{
     return this.status === moduleStatuses.resetting;
   }
 
-  getReducers() { return {} }
+  getReducers() { return {}; }
 
-  getActionTypes() { return [] }
+  getActionTypes() { return []; }
 
   onStateChange() {}
 
@@ -267,9 +265,9 @@ class Module extends Base{
 
   moduleDidInitialize() {}
 
-  moduleWillReset(){}
+  moduleWillReset() {}
 
-  moduleDidReset(){}
+  moduleDidReset() {}
 }
 
 export {
