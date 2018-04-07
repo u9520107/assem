@@ -15,7 +15,7 @@ const DEFAULT_PROPERTY = {
 
 class Module extends Base{
 
-  _instanced(
+  _makeInstance(
     params = {}
   ) {
     params.modules = params.modules || [];
