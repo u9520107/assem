@@ -92,10 +92,9 @@ class Module extends Base{
     if (
       typeof subscribe !== 'function' ||
       typeof getState !== 'function' ||
-      typeof dispatch !== 'function' ||
-      __DEV__
+      typeof dispatch !== 'function'
     ) {
-      console.warn(`${this.constructor.name} Module did't correctly set custom 'Store'.`);
+      if (__DEV__) console.warn(`${this.constructor.name} Module did't correctly set custom 'Store'.`);
     }
     Object.defineProperties(this, {
       _dispatch: {
