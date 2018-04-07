@@ -1,5 +1,5 @@
 export default class Base {
-  constructor(params = {}, modules = {}) {
-    this._instanced(params, modules);
+  constructor(...args) {
+    this._instanced(...args);
   }
 }

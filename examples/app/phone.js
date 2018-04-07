@@ -108,18 +108,17 @@ class Phone extends BasePhone {
 class Account extends Module{}
 class Auth extends Module{}
 const account = new Account();
-const auth = new Auth({}, {
-  account,
+const auth = new Auth({
+  modules: [account],
 });
-const contact = new Contact({}, {
-  account
+const contact = new Contact({
+  modules: [account],
 });
-const index = new Index({},{
-  contact,
+const index = new Index({
+  modules: [contact],
 });
-const phone = new Phone({}, {
-  index,
-  auth
+const phone = new Phone({
+  modules: [index, auth]
 });
 // const phone = Phone.create({
 //   version: '0.1'

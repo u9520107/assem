@@ -15,7 +15,17 @@ const DEFAULT_PROPERTY = {
 
 class Module extends Base{
 
-  _instanced(params, modules) {
+  _instanced(
+    params = {}
+  ) {
+    params.modules = params.modules || [];
+    const modulesMapping = params.modules
+      .reduce((mapping, module) => {
+        const key = this._proto._getModuleKey(module);
+        return Object.assign(mapping, {
+          [key]: module,
+        });
+      }, {});
     Object.defineProperties(this, {
       _arguments: {
         ...DEFAULT_PROPERTY,
@@ -23,11 +33,10 @@ class Module extends Base{
       },
       _modules: {
         ...DEFAULT_PROPERTY,
-        value: modules,
+        value: modulesMapping,
       }
     });
-    // TODO constructor.name diff?
-    const key = this.constructor.name.toLowerCase();
+    const key = this._proto._getModuleKey(this);
     this.getState = this._arguments.getState || (() => (this._store.getState.call(this)[key]));
   }
 
@@ -171,6 +180,10 @@ class Module extends Base{
 
   _getActionTypes() {
     return getActionTypes(this.getActionTypes(), this.constructor.name);
+  }
+
+  static _getModuleKey(module) {
+    return module.constructor.name.toLowerCase();
   }
 
   static create(config, modules) {

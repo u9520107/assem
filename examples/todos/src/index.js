@@ -88,17 +88,9 @@ class TodoUI extends Component {
 }
 
 class AppView extends Module {
-  constructor(params, modules) {
-    super(params, modules);
-    this.components = Object.keys(modules);
-  }
-  getComponent(key) {
-    return this._modules[key].component;
-  }
-
   getComponents() {
-    return this.components
-      .map(key => React.createElement(this.getComponent(key), {app: this}));
+    return this._arguments.modules
+      .map(module => React.createElement(module.component, {app: this}));
   }
 
   render() {
@@ -108,25 +100,24 @@ class AppView extends Module {
 }
 
 const assemblingExample = new AssemblingExample({
-  component: ExampleUI
-}, {
-  example: new Example()
+  component: ExampleUI,
+  modules: [new Example()],
 });
 
 const assemblingCount =  new AssemblingCount({
-  component: CountUI
-}, {
-  count: new Count()
+  component: CountUI,
+  modules: [new Count()],
 });
 
 const assemblingTodo =  new AssemblingTodo({
-  component: TodoUI
-}, {
-  todo: new Todo()
+  component: TodoUI,
+  modules: [new Todo()]
 });
 
 
-const app = AppView.create({}, { assemblingExample, assemblingCount, assemblingTodo });
+const app = AppView.create({
+  modules: [assemblingExample, assemblingCount, assemblingTodo]
+});
 
 class App extends Component {
   render() {
