@@ -97,11 +97,12 @@ class Module extends Base {
     } = this._store;
     getState = !this.parentModule || !this.getState ? getState.bind(this) : this.getState;
     if (
+      __DEV__ &&
       typeof subscribe !== 'function' ||
       typeof getState !== 'function' ||
       typeof dispatch !== 'function'
     ) {
-      if (__DEV__) console.warn(`${this.constructor.name} Module did't correctly set custom 'Store'.`);
+      console.warn(`${this.constructor.name} Module did't correctly set custom 'Store'.`);
     }
     Object.defineProperties(this, {
       _dispatch: {
