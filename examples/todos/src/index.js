@@ -56,18 +56,6 @@ class CountUI extends Component {
   }
 }
 
-const assemblingExample = new AssemblingExample({
-  component: ExampleUI
-}, {
-  example: new Example()
-});
-
-const assemblingCount =  new AssemblingCount({
-  component: CountUI
-}, {
-  count: new Count()
-});
-
 class AppView extends Module {
   constructor(params, modules) {
     super(params, modules);
@@ -85,11 +73,20 @@ class AppView extends Module {
   render() {
     const components = this.getComponents();
     return React.createElement('div', null, ...components);
-    // return (
-    //   React.createElement(this.component, {app})
-    // );
   }
 }
+
+const assemblingExample = new AssemblingExample({
+  component: ExampleUI
+}, {
+  example: new Example()
+});
+
+const assemblingCount =  new AssemblingCount({
+  component: CountUI
+}, {
+  count: new Count()
+});
 
 const app = AppView.create({}, { assemblingExample, assemblingCount });
 
