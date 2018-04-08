@@ -60,7 +60,8 @@ class Event {
     } else if (listeners.length === 0) {
       throw new Error(`Event type ${eventType} has not any listener.`);
     }
-    listeners.forEach(({ callback, once }, index) => {
+    // TODO?
+    [...listeners].forEach(({ callback, once }, index) => {
       callback.apply(this, args);
       if (once) {
         listeners.splice(index, 1);
