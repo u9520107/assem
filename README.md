@@ -8,3 +8,6 @@ It's just a generalized modular combiner for Universal Javascript, and advocates
  - [x] State container optional
  - [x] Extensible for module
  - [ ] Dependency injection
+ 
+ ### Flow Chart
+![Data Flow](https://raw.githubusercontent.com/unadlib/assem/master/flow_chart.png)
