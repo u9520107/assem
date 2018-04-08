@@ -60,12 +60,11 @@ class Event {
     } else if (listeners.length === 0) {
       throw new Error(`Event type ${eventType} has not any listener.`);
     }
-    // TODO?
     [...listeners].forEach(({ callback, once }, index) => {
-      callback.apply(this, args);
       if (once) {
         listeners.splice(index, 1);
       }
+      callback.apply(this, args);
     });
   }
 }
